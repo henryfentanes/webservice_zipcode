@@ -72,3 +72,12 @@ class ZipcodeDeleteTest(TestCase):
         client = rest_client()
         response = client.delete('/zipcode/14020260/')
         self.assertEqual(204, response.status_code)
+
+
+class ZipcodeDetailTest(TestCase):
+    def setUp(self):
+        self.client.post('/zipcode/', data={'zip_code': 14020260})
+
+    def test_detail_zipcode(self):
+        response = self.client.get('/zipcode/14020260/')
+        self.assertEqual(200, response.status_code)
