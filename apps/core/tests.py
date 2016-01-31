@@ -16,7 +16,7 @@ class HomeTest(TestCase):
         self.assertTemplateUsed(self.response, 'core/index.html')
 
 
-class ZipCodeCreateTest(TestCase):
+class ZipcodeCreateTest(TestCase):
     def test_create_zipcode_scenario_1(self):
         response = self.client.post('/zipcode/', data={'zip_code': 14020260})
         self.assertEqual(201, response.status_code)
@@ -44,3 +44,20 @@ class ZipCodeCreateTest(TestCase):
     def test_false_zipcode(self):
         response = self.client.post('/zipcode/', data={'zip_code': 1402260})
         self.assertEqual(404, response.status_code)
+
+
+class ZipcodeListTest(TestCase):
+    def setUp(self):
+        self.client.post('/zipcode/', data={'zip_code': 14020260})
+        self.client.post('/zipcode/', data={'zip_code': 14110000})
+        self.client.post('/zipcode/', data={'zip_code': 20040972})
+
+    def test_list_all_zipcodes(self):
+        response = self.client.get('/zipcode/')
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(3, len(response.data))
+
+    def test_list_with_limit(self):
+        '''User must be able to limit the list with limit parameter'''
+        response = self.client.get('/zipcode/?limit=1')
+        self.assertEqual(1, len(response.data))
