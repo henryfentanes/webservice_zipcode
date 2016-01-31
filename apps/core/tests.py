@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.test import TestCase
+from rest_framework.test import APIClient as rest_client
 from django.core.urlresolvers import reverse
 
 
@@ -61,3 +62,13 @@ class ZipcodeListTest(TestCase):
         '''User must be able to limit the list with limit parameter'''
         response = self.client.get('/zipcode/?limit=1')
         self.assertEqual(1, len(response.data))
+
+
+class ZipcodeDeleteTest(TestCase):
+    def setUp(self):
+        self.client.post('/zipcode/', data={'zip_code': 14020260})
+
+    def test_delete_zipcode(self):
+        client = rest_client()
+        response = client.delete('/zipcode/14020260/')
+        self.assertEqual(204, response.status_code)
