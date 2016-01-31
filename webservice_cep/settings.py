@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
+from __future__ import absolute_import
 import os
 from decouple import config
 from dj_database_url import parse as dburl
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.core',
+    'rest_framework'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -120,3 +122,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
+}
