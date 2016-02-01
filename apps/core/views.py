@@ -9,7 +9,7 @@ from apps.core.models import Zipcode, LogAction
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
-from apps.core.serializers import ZipcodeSerializer
+from apps.core.serializers import ZipcodeSerializer, LogSerializer
 
 
 class Home(TemplateView):
@@ -53,3 +53,13 @@ class ZipcodeViewSet(viewsets.ModelViewSet):
                 action_flag='3')
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+
+class LogViewSet(viewsets.ModelViewSet):
+    queryset = LogAction.objects.filter()
+    serializer_class = LogSerializer
+
+    def get_queryset(self):
+        queryset = LogAction.objects.filter(
+            zip_code=self.kwargs.get('zip_code'))
+        return queryset

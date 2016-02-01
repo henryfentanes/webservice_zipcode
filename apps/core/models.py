@@ -24,6 +24,9 @@ class LogAction(models.Model):
         'Action Flag', max_length=1, choices=FLAG_CHOICE)
     action_time = models.DateTimeField(auto_now=True)
 
+    def action_time_display(self):
+        return self.action_time.strftime('%d/%m/%Y - %H:%M')
+
 
 # Signals
 

@@ -81,3 +81,23 @@ class ZipcodeDetailTest(TestCase):
     def test_detail_zipcode(self):
         response = self.client.get('/zipcode/14020260/')
         self.assertEqual(200, response.status_code)
+
+
+class LogTest(TestCase):
+    def setUp(self):
+        self.client.post('/zipcode/', data={'zip_code': 14020260})
+
+    def test_log_create(self):
+        response = self.client.get('/log/14020260/')
+        self.assertEqual(1, len(response.data))
+
+    def test_log_detail(self):
+        self.client.get('/zipcode/14020260/')
+        response = self.client.get('/log/14020260/')
+        self.assertEqual(2, len(response.data))
+
+    def test_log_delete(self):
+        client = rest_client()
+        client.delete('/zipcode/14020260/')
+        response = self.client.get('/log/14020260/')
+        self.assertEqual(2, len(response.data))
