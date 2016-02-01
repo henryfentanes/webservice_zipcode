@@ -36,24 +36,30 @@
       </div>
 
       <div class="row marketing">
-        <div class="col-lg-6">
-          <h4>Inclua</h4>
-          <p>curl --data "zip_code=14020260" https://api-cep-henryfentanes.herokuapp.com/zipcode/</p>
+          <div class="col-md-12"><h4>Inclua</h4></div>
+          <div class="col-md-8"><input type="text" name="zip_code" id="inserir" class="form-control"></div>
+          <div class="col-md-4"><a class="btn btn-primary send" data-field="inserir" data-toggle="modal" href='#modal-id'>Incluir</a></div>
+          <div class="col-md-12"><p>curl --data "zip_code=14020260" https://api-cep-henryfentanes.herokuapp.com/zipcode/</p></div>
 
-          <h4>Exclua</h4>
-          <p>curl -X DELETE https://api-cep-henryfentanes.herokuapp.com/zipcode/14020260/</p>
+          <div class="col-md-12"><h4>Exclua</h4></div>
+          <div class="col-md-8"><input type="text" name="zip_code" id="delete" class="form-control"></div>
+          <div class="col-md-4"><a class="btn btn-primary send" data-field="delete" data-toggle="modal" href='#modal-id'>Excluir</a></div>
+          <div class="col-md-12"><p>curl -X DELETE https://api-cep-henryfentanes.herokuapp.com/zipcode/14020260/</p></div>
 
-        </div>
 
-        <div class="col-lg-6">
-          <h4>Consulte</h4>
-          <p>curl https://api-cep-henryfentanes.herokuapp.com/zipcode/14020260/</p>
+          <div class="col-md-12"><h4>Consulte</h4></div>
+          <div class="col-md-8"><input type="text" name="zip_code" id="detail" class="form-control"></div>
+          <div class="col-md-4"><a class="btn btn-primary send" data-field="detail" data-toggle="modal" href='#modal-id'>Consultar</a></div>
+          <div class="col-md-12"><p>curl https://api-cep-henryfentanes.herokuapp.com/zipcode/14020260/</p></div>
 
-          <h4>Liste</h4>
-          <p>curl https://api-cep-henryfentanes.herokuapp.com/zipcode/?limit=xxx</p>
-          <p>Opcionalmente omita ?limit=xxx para listar Todos os registros</p>
+          <div class="col-md-12"><h4>Liste</h4></div>
+          <div class="col-md-8"><input type="text" name="limit" id="list" class="form-control"></div>
+          <div class="col-md-4"><a class="btn btn-primary send" data-field="list" data-toggle="modal" href='#modal-id' id="list">Listar</a></div>
+          <div class="col-md-12">
+            <p>curl https://api-cep-henryfentanes.herokuapp.com/zipcode/?limit=xxx</p>
+            <p class="help-block">Opcionalmente omita ?limit=xxx para listar Todos os registros</p>
+          </div>
 
-        </div>
       </div>
 
       <footer class="footer">
@@ -64,7 +70,74 @@
   </body>
 </html>
 
+
+<div class="modal fade" id="modal-id">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Latest compiled and minified CSS & JS -->
 <link rel="stylesheet" media="screen" href="//netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 <script src="//code.jquery.com/jquery.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<script>
+  $(document).on("click", ".send", function(e) {
+      var self = $(this),
+          field = $(this).data('field');
+          data = $('#'+field).serialize(),
+          url = '/zipcode/',
+          dataType = 'json',
+
+      type = "POST";
+      if(field == 'delete'){
+        type = "DELETE";
+        url = url + $('#'+field).val()+'/'
+      };
+      if(field == 'detail'){
+        type = "GET";
+        url = url + $('#'+field).val()+'/'
+      };
+      if(field == 'list'){
+        type = "GET";
+      };
+
+      $.ajax({
+          url: url,
+          type: type,
+          crossDomain: true, // obviates need for sameOrigin test
+          data: data,
+          beforeSend: function(request, xhr, settings) {
+            $('.modal-title').text(field.toUpperCase());
+            $('.modal-body').text('')
+          },
+          success: function(data, textStatus, xhr){
+            if(field == 'delete'){
+              $('.modal-body').append('Excluído com sucesso')
+            } else{
+              $(data).each(function(i){
+                $('.modal-body').append(JSON.stringify(this) + '<br>');
+              })
+            }
+          },
+          error: function(request, data, textStatus, xhr){
+            $('.modal-body').append('Erro')
+            $('.modal-body').append(request.responseText + '<br>');
+          }
+      });
+
+  });
+</script>
