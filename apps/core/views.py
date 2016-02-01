@@ -4,7 +4,7 @@ import requests
 import json
 from django.http import Http404
 from django.views.generic import TemplateView
-from apps.core.models import Zipcode
+from apps.core.models import Zipcode, LogAction
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -44,3 +44,12 @@ class ZipcodeViewSet(viewsets.ModelViewSet):
             else:
                 cleaned_data[field.name] = ''
         return cleaned_data
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance:
+            LogAction.objects.create(
+                zip_code=instance.pk,
+                action_flag='3')
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
