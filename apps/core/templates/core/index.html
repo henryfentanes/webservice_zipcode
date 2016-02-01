@@ -24,7 +24,7 @@
         <nav>
           <ul class="nav nav-pills pull-right">
             <li role="presentation"><a href="#">How to Use</a></li>
-            <li role="presentation"><a href="#">Github</a></li>
+            <li role="presentation"><a href="https://github.com/henryfentanes/webservice_zipcode">Github</a></li>
           </ul>
         </nav>
         <h3 class="text-muted">CEP API</h3>
@@ -38,19 +38,20 @@
       <div class="row marketing">
         <div class="col-lg-6">
           <h4>Inclua</h4>
-          <p>Inclusão do CEP</p>
+          <p>curl --data "zip_code=14020260" https://api-cep-henryfentanes.herokuapp.com/zipcode/</p>
 
           <h4>Exclua</h4>
-          <p>Exclusão do CEP</p>
+          <p>curl -X DELETE https://api-cep-henryfentanes.herokuapp.com/zipcode/14020260/</p>
 
         </div>
 
         <div class="col-lg-6">
           <h4>Consulte</h4>
-          <p>Consulte todos os dados do CEP</p>
+          <p>curl https://api-cep-henryfentanes.herokuapp.com/zipcode/14020260/</p>
 
           <h4>Liste</h4>
-          <p>Liste todos os CEPs cadastrados</p>
+          <p>curl https://api-cep-henryfentanes.herokuapp.com/zipcode/?limit=xxx</p>
+          <p>Opcionalmente omita ?limit=xxx para listar Todos os registros</p>
 
         </div>
       </div>
